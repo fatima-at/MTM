@@ -1,0 +1,10 @@
+[
+  {
+    "meeting_id":"1",
+    "verb": "stop",
+    "sentence": "Rokaya, please stop being delulu today.",
+    "assignee": ["Rokaya"],
+    "deadline": ["Today"],
+    "urgency": "High"
+  }
+]

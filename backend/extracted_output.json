@@ -1,0 +1,10 @@
+[
+  {
+    "meeting_id":"1",
+    "verb": "send",
+    "sentence": "John, please send the report by Friday.",
+    "assignee": ["John"],
+    "deadline": ["Friday"],
+    "urgency": "High"
+  }
+]

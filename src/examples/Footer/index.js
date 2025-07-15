@@ -1,19 +1,3 @@
-/**
-=========================================================
-* Soft UI Dashboard React - v4.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
 
 // @mui material components
@@ -28,7 +12,7 @@ import SoftTypography from "components/SoftTypography";
 import typography from "assets/theme/base/typography";
 
 function Footer({ company, links }) {
-  const { href, name } = company || { href: "#", name: "Your Company" };
+  const { href, name } = company || { href: "#", name: "MTM" };
   const { size } = typography;
 
   const renderLinks = () =>
@@ -60,7 +44,7 @@ function Footer({ company, links }) {
         fontSize={size.sm}
         px={1.5}
       >
-        &copy; {new Date().getFullYear()}, made with
+        {/* &copy; {new Date().getFullYear()}, hi */}
         <SoftBox fontSize={size.md} color="text" mb={-0.5} mx={0.25}>
           <Icon color="inherit" fontSize="inherit">
             favorite
@@ -72,7 +56,7 @@ function Footer({ company, links }) {
             &nbsp;{name}&nbsp;
           </SoftTypography>
         </Link>
-        for a better web.
+       hh
       </SoftBox>
       <SoftBox
         component="ul"
