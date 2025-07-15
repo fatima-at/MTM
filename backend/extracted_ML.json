@@ -1,56 +1,55 @@
 {
-  "meeting_id": 5,
-  "summary": "Discussion on two upcoming projects: an AI-powered customer support chatbot and a cloud-based inventory management system for warehouse operation. Deployment of MVP version of the chatbot within four weeks, and compilation of the inventory management system in about six weeks.",
+  "meeting_id": 6,
+  "summary": "The meeting discussed two upcoming projects: an AI-powered customer support chatbot to be deployed within four weeks and a cloud-based inventory management system for warehouse operation, with a target completion of six weeks. Both projects require the involvement of end, back end, and machine learning engineers.",
   "tasks": [
     {
-      "task": "Develop MVP version of AI-powered customer support chatbot",
-      "sentence": "Integrate with CRM system, handle real-time queries using natural language processing. Deploy within four weeks.",
+      "task": "Develop MVP version of AI chatbot",
+      "sentence": "Develop an MVP version of an AI-powered customer support chatbot that integrates with the CRM system using natural language processing, with a deployment deadline within four weeks.",
       "urgency": "high",
       "skills": [
-        "back end",
         "AI",
-        "machine learning",
-        "NLP"
+        "Natural Language Processing",
+        "Integration"
       ],
-      "deadline": "2025-08-13",
+      "deadline": "2025-08-16",
       "assignee": [
-        {
-          "id": 3,
-          "name": "Charlie Lee",
-          "match_score": 0.378
-        },
         {
           "id": 8,
           "name": "Hannah Martinez",
           "match_score": 0.541
         },
         {
-          "id": 5,
-          "name": "Ethan Brown",
-          "match_score": 0.349
+          "id": 2,
+          "name": "Bob Smith",
+          "match_score": 0.264
         }
       ]
     },
     {
-      "task": "Develop cloud-based inventory management system for warehouse operation",
-      "sentence": "Support automated restocking alerts, barcode scanning, integration, and detailed analytics dashboards. Compile in about six weeks.",
+      "task": "Develop cloud-based inventory management system",
+      "sentence": "Develop a cloud-based inventory management system for warehouse operation that supports automated restocking alerts, barcode scanning, integration, and detailed analytics dashboards, with a target completion of six weeks.",
       "urgency": "high",
       "skills": [
-        "back end",
-        "cloud computing",
-        "inventory management"
+        "Cloud Computing",
+        "Inventory Management",
+        "Integration"
       ],
-      "deadline": "2025-09-01",
+      "deadline": "2025-09-03",
       "assignee": [
         {
           "id": 3,
           "name": "Charlie Lee",
-          "match_score": 0.378
+          "match_score": 0.52
         },
         {
           "id": 8,
           "name": "Hannah Martinez",
           "match_score": 0.297
+        },
+        {
+          "id": 2,
+          "name": "Bob Smith",
+          "match_score": 0.264
         }
       ]
     }

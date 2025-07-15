@@ -1,56 +1,50 @@
 [
   {
     "verb": "discuss",
-    "sentence": "\nDuring today's meeting, we discussed two upcoming projects for our development team.",
+    "sentence": "During today's meeting, we discussed two upcoming projects for our development team.",
     "deadline": [
       "today"
     ],
-    "urgency": null,
-    "assignee": "Unassigned",
-    "skill": "Unknown"
+    "urgency": null
   },
   {
     "verb": "aim",
-    "sentence": "We aim to deliver a working prototype within three weeks.\n\n",
+    "sentence": "We aim to deploy an MVP version of that chat what within four weeks.",
     "deadline": [
-      "three weeks"
+      "four weeks"
     ],
-    "urgency": null,
-    "assignee": "Unassigned",
-    "skill": "design"
+    "urgency": null
   },
   {
-    "verb": "involve",
-    "sentence": "The second project involves creating a web-based dashboard for managing IoT sensors across smart homes.",
+    "verb": "focus",
+    "sentence": "The second project focuses on developing a cloud-based inventory management system for warehouse operation.",
     "deadline": null,
-    "urgency": null,
-    "assignee": "Alice Johnson",
-    "skill": "web"
+    "urgency": null
+  },
+  {
+    "verb": "support",
+    "sentence": "Mathform must support automated restocking alerts, barcode scanning, integration, and detailed analytics dashboards.",
+    "deadline": null,
+    "urgency": null
   },
   {
     "verb": "target",
-    "sentence": "We are targeting a launch in two months.\n\n",
+    "sentence": "We are targeting compilation in about six weeks.",
     "deadline": [
-      "two months"
+      "about six weeks"
     ],
-    "urgency": null,
-    "assignee": "Unassigned",
-    "skill": "Unknown"
+    "urgency": null
   },
   {
     "verb": "involve",
-    "sentence": "Design, backend, and data engineers will be involved in both projects.",
+    "sentence": "From end, back end, and machine learning engineers will be involved in both projects.",
     "deadline": null,
-    "urgency": null,
-    "assignee": "Unassigned",
-    "skill": "design"
+    "urgency": null
   },
   {
-    "verb": "determine",
-    "sentence": "Tasks and assignments will be determined in follow-up sessions.\n",
+    "verb": "finalize",
+    "sentence": "Task distribution and specific responsibilities will be finalized in the next planning session.",
     "deadline": null,
-    "urgency": null,
-    "assignee": "Unassigned",
-    "skill": "Unknown"
+    "urgency": null
   }
 ]

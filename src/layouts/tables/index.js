@@ -14,11 +14,12 @@ import Table from "examples/Tables/Table";
 const columns = [
   { name: "task", align: "left" },
   { name: "description", align: "left" },
-  { name: "assignee", align: "left" },
+  { name: "assignedTo", align: "left" }, // <-- changed from "assignee" to "assignedTo"
   { name: "deadline", align: "center" },
   { name: "skill", align: "center" },
   { name: "urgency", align: "center" },
 ];
+
 
 function Tables() {
   const [rows, setRows] = useState([]);
