@@ -26,40 +26,54 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import Table from "examples/Tables/Table";
 
-// Data
-import authorsTableData from "layouts/tables/data/authorsTableData";
-import projectsTableData from "layouts/tables/data/projectsTableData";
+// Remove these imports
+// import authorsTableData from "layouts/tables/data/authorsTableData";
+// import projectsTableData from "layouts/tables/data/projectsTableData";
+
+// Example: Replace with your real user and tasks data
+const currentUser = { id: "user123", name: "John Doe" };
+const tasks = [
+  {
+    description: "Finish report",
+    deadline: "2025-06-15",
+    urgency: "High",
+    people: [
+      ["avatar1.png", "John Doe"],
+      ["avatar2.png", "Jane Smith"],
+    ],
+    assignedTo: ["user123", "user456"],
+  },
+  // ...add more tasks as needed...
+];
 
 function Tables() {
-  const { columns, rows } = authorsTableData;
-  const { columns: prCols, rows: prRows } = projectsTableData;
+  // Filter tasks assigned to the current user
+  const userTasks = tasks.filter(task => task.assignedTo.includes(currentUser.id));
+
+  // Define columns
+  const columns = [
+    { name: "description", align: "left" },
+    { name: "deadline", align: "center" },
+    { name: "urgency", align: "center" },
+    { name: "people", align: "left" },
+  ];
+
+  // Format rows for the Table component
+  const rows = userTasks.map(task => ({
+    description: task.description,
+    deadline: task.deadline,
+    urgency: task.urgency,
+    people: task.people[0], // Shows first person as avatar+name
+    hasBorder: true,
+  }));
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <SoftBox py={3}>
-        <SoftBox mb={3}>
-          <Card>
-            <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-              <SoftTypography variant="h6">Authors table</SoftTypography>
-            </SoftBox>
-            <SoftBox
-              sx={{
-                "& .MuiTableRow-root:not(:last-child)": {
-                  "& td": {
-                    borderBottom: ({ borders: { borderWidth, borderColor } }) =>
-                      `${borderWidth[1]} solid ${borderColor}`,
-                  },
-                },
-              }}
-            >
-              <Table columns={columns} rows={rows} />
-            </SoftBox>
-          </Card>
-        </SoftBox>
         <Card>
           <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-            <SoftTypography variant="h6">Projects table</SoftTypography>
+            <SoftTypography variant="h6">My Tasks</SoftTypography>
           </SoftBox>
           <SoftBox
             sx={{
@@ -71,7 +85,7 @@ function Tables() {
               },
             }}
           >
-            <Table columns={prCols} rows={prRows} />
+            <Table columns={columns} rows={rows} />
           </SoftBox>
         </Card>
       </SoftBox>

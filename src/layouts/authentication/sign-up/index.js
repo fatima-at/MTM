@@ -35,9 +35,17 @@ import Separator from "layouts/authentication/components/Separator";
 
 // Images
 import curved6 from "assets/images/curved-images/curved14.jpg";
-
+import { useEffect } from "react";
+import { useSoftUIController, setLayout } from "context";
 function SignUp() {
   const [agreement, setAgremment] = useState(true);
+
+  // 🔧 Add layout setter
+  const [, dispatch] = useSoftUIController();
+
+  useEffect(() => {
+    setLayout(dispatch, "authentication");
+  }, [dispatch]);
 
   const handleSetAgremment = () => setAgremment(!agreement);
 
