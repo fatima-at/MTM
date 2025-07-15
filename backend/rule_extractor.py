@@ -1,8 +1,6 @@
 import spacy
 from spacy.matcher import Matcher
 from typing import List, Dict
-import json
-import os
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -13,6 +11,9 @@ def extract_actions(text: str) -> List[Dict]:
     matcher.add("IMPERATIVE", [pattern])
     matches = matcher(doc)
 
+    # Define urgency keywords (expand as needed)
+    urgency_keywords = {"urgent", "asap", "immediately", "high priority", "right away", "as soon as possible", "important"}
+
     actions = []
     for match_id, start, end in matches:
         verb = doc[start:end][0]
@@ -21,13 +22,21 @@ def extract_actions(text: str) -> List[Dict]:
         assignee = [ent.text for ent in sentence.ents if ent.label_ == "PERSON"]
         deadline = [ent.text for ent in sentence.ents if ent.label_ in ("DATE", "TIME")]
 
+        # Extract urgency by checking for keywords in the sentence (case-insensitive)
+        sentence_text_lower = sentence.text.lower()
+        urgency = None
+        for keyword in urgency_keywords:
+            if keyword in sentence_text_lower:
+                urgency = "High"
+                break
+
         actions.append({
             "verb": verb.lemma_,
             "sentence": sentence.text,
             "assignee": assignee or None,
-            "deadline": deadline or None
+            "deadline": deadline or None,
+            "urgency": urgency
         })
         print("Extracted actions:", actions)
 
     return actions
-

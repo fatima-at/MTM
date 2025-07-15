@@ -6,7 +6,7 @@ const path = require("path");
 
 const { saveMeeting } = require("./db");
 const { extractTextFromMedia } = require("./speechToText");
-
+const { spawn } = require("child_process");
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -31,6 +31,7 @@ app.post("/api/meetings/upload", upload.single("meetingFile"), async (req, res) 
     const meetingId = await saveMeeting(file.originalname, transcript);
     console.log(`Meeting saved to DB with ID: ${meetingId}`);
 
+    const actions = await extractActionsFromText(transcript);
     // Optionally delete the file after processing
     fs.unlink(file.path, () => {
       console.log(`Temporary file deleted: ${file.path}`);
@@ -41,6 +42,53 @@ app.post("/api/meetings/upload", upload.single("meetingFile"), async (req, res) 
   } catch (err) {
     console.error("Server error:", err);
     res.status(500).send("Server error: " + err.message);
+  }
+});
+
+async function extractActionsFromText(text) {
+  return new Promise((resolve, reject) => {
+    const python = spawn("python", [
+      path.resolve(__dirname, "extract_from_text.py"),
+      text,
+    ]);
+
+    let output = "";
+    let error = "";
+
+    python.stdout.on("data", (data) => {
+      output += data.toString();
+    });
+
+    python.stderr.on("data", (data) => {
+      error += data.toString();
+    });
+     python.on("close", (code) => {
+      if (code === 0) {
+        try {
+          resolve(JSON.parse(output));
+        } catch (e) {
+          reject(new Error("Failed to parse extractor output: " + output));
+        }
+      } else {
+        reject(new Error(error || "Extraction failed"));
+      }
+    });
+  });
+}
+app.get("/action-items", (req, res) => {
+  const { meeting_id, type } = req.query;
+  if (type === "rule") {
+    // Serve extracted_output.json for rule-based
+    const filePath = path.join(__dirname, "extracted_output.json");
+    if (fs.existsSync(filePath)) {
+      const data = fs.readFileSync(filePath, "utf-8");
+      res.json(JSON.parse(data));
+    } else {
+      res.json([]);
+    }
+  } else {
+    // TODO: Handle ML-based or other types
+    res.json([]);
   }
 });
 

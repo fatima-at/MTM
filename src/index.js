@@ -4,13 +4,17 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { SoftUIControllerProvider } from "context";
 
+// ADD THESE TWO LINES:
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "./assets/theme/index";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <SoftUIControllerProvider>
+  <BrowserRouter>
+    <SoftUIControllerProvider>
+      <ThemeProvider theme={theme}>
         <App />
-      </SoftUIControllerProvider>
-    </BrowserRouter>
-  </React.StrictMode>
+      </ThemeProvider>
+    </SoftUIControllerProvider>
+  </BrowserRouter>
 );

@@ -2,29 +2,8 @@
   {
     "verb": "send",
     "sentence": "John, please send the report by Friday.",
-    "assignee": [
-      "John"
-    ],
-    "deadline": [
-      "Friday"
-    ]
-  },
-  {
-    "verb": "schedule",
-    "sentence": "Schedule a meeting with the design team tomorrow.",
-    "assignee": null,
-    "deadline": [
-      "tomorrow"
-    ]
-  },
-  {
-    "verb": "review",
-    "sentence": "Alice will review the code next Monday.",
-    "assignee": [
-      "Alice"
-    ],
-    "deadline": [
-      "next Monday"
-    ]
+    "assignee": ["John"],
+    "deadline": ["Friday"],
+    "urgency": "High"
   }
 ]
