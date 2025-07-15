@@ -26,4 +26,16 @@ function saveMeeting(filename, transcript) {
   });
 }
 
-module.exports = { saveMeeting };
+
+function getLatestMeeting() {
+  return new Promise((resolve, reject) => {
+    db.get(
+      "SELECT id, transcript FROM meetings ORDER BY id DESC LIMIT 1",
+      (err, row) => {
+        if (err) return reject(err);
+        resolve(row);
+      }
+    );
+  });
+}
+module.exports = { saveMeeting,  getLatestMeeting };

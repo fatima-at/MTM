@@ -4,7 +4,7 @@ const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
 
-const { saveMeeting } = require("./db");
+const { saveMeeting, getLatestMeeting } = require("./db");
 const { extractTextFromMedia } = require("./speechToText");
 const { spawn } = require("child_process");
 const app = express();
@@ -115,5 +115,27 @@ app.get("/summarize", (req, res) => {
     rule_summary: ruleSummary,
     ml_summary: mlSummary
   });
+});
+
+app.get("/extract-latest", async (req, res) => {
+  try {
+    // Get the latest meeting from the database
+    const latestMeeting = await getLatestMeeting(); // You need to implement this in db.js
+
+    if (!latestMeeting) {
+      return res.status(404).json({ error: "No meetings found." });
+    }
+
+    const { id, transcript } = latestMeeting;
+    const actions = await extractActionsFromText(transcript);
+
+    res.json({
+      meeting_id: id,
+      tasks: actions
+    });
+  } catch (err) {
+    console.error("Error extracting latest meeting:", err);
+    res.status(500).json({ error: err.message });
+  }
 });
 app.listen(5000, () => console.log("Server started on port 5000"));
