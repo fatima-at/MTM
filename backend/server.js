@@ -4,7 +4,7 @@ const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
 
-const { saveMeeting } = require("./db");
+const { saveMeeting, getLatestMeeting, getAllEmployees } = require("./db");
 const { extractTextFromMedia } = require("./speechToText");
 const { spawn } = require("child_process");
 const app = express();
@@ -67,23 +67,30 @@ async function extractActionsFromText(text) {
   return new Promise((resolve, reject) => {
     const python = spawn("python", [
       path.resolve(__dirname, "extract_from_text.py"),
-      text,
     ]);
 
-    let output = "";
-    let error = "";
+    let outputChunks = [];
+    let errorChunks = [];
+
+    python.stdin.write(text);
+    python.stdin.end();
 
     python.stdout.on("data", (data) => {
-      output += data.toString();
+      outputChunks.push(data);
     });
 
     python.stderr.on("data", (data) => {
-      error += data.toString();
+      errorChunks.push(data);
     });
-     python.on("close", (code) => {
+
+    python.on("close", (code) => {
+      const output = Buffer.concat(outputChunks).toString();
+      const error = Buffer.concat(errorChunks).toString();
+
       if (code === 0) {
         try {
-          resolve(JSON.parse(output));
+          const result = JSON.parse(output);
+          resolve(result);
         } catch (e) {
           reject(new Error("Failed to parse extractor output: " + output));
         }
@@ -93,6 +100,7 @@ async function extractActionsFromText(text) {
     });
   });
 }
+
 app.get("/action-items", (req, res) => {
   const { meeting_id, type } = req.query;
 
@@ -140,5 +148,104 @@ app.get("/summarize", (req, res) => {
     ml_summary: mlSummary
   });
 });
+
+function normalizeEmployeeSkills(rawSkills) {
+  const map = {
+    "node.js": "backend",
+    "vue.js": "web",
+    "react": "web",
+    "angular": "web",
+    "sql": "data",
+    "graphql": "api",
+    "mongodb": "data",
+    "python": "python",
+    "figma": "design",
+    "ui": "design"
+  };
+
+  return (rawSkills || "")
+    .toLowerCase()
+    .split(/[,; ]+/)
+    .map(s => s.trim())
+    .map(skill => map[skill] || skill);  // normalize or keep as-is
+}
+
+const matchTasksToEmployees = (tasks, employees) => {
+  const skillKeywords = ["web", "python", "design", "data", "api", "backend"];
+
+  const synonyms = {
+    dashboard: "web",
+    frontend: "web",
+    ui: "design",
+    ux: "design",
+    prototype: "design",
+    iot: "backend",
+    database: "data",
+    analysis: "data"
+  };
+
+  return tasks.map(task => {
+    let sentence = task.sentence.toLowerCase();
+
+    // Add synonyms to help match
+    Object.entries(synonyms).forEach(([keyword, mappedSkill]) => {
+      if (sentence.includes(keyword)) {
+        sentence += " " + mappedSkill;
+      }
+    });
+
+    const matchedSkill = skillKeywords.find(skill =>
+      sentence.includes(skill)
+    );
+
+    const assignedEmployee = employees.find(emp => {
+      const normalizedSkills = normalizeEmployeeSkills(emp.skills);
+      return matchedSkill && normalizedSkills.includes(matchedSkill);
+    });
+
+    const assignedTo = assignedEmployee
+      ? `${assignedEmployee.first_name} ${assignedEmployee.last_name}`
+      : "Unassigned";
+
+    console.log(`\nTask: "${task.sentence.trim()}"`);
+    console.log(`Matched Skill: ${matchedSkill || "None"}`);
+    console.log(`Assigned To: ${assignedTo}`);
+
+    return {
+      ...task,
+      assignee: assignedTo,
+      skill: matchedSkill || "Unknown"
+    };
+  });
+};
+
+
+
+app.get("/extract-latest", async (req, res) => {
+  try {
+    const latestMeeting = await getLatestMeeting();
+    if (!latestMeeting) {
+      return res.status(404).json({ error: "No meetings found." });
+    }
+
+    const { id, transcript } = latestMeeting;
+    const tasks = await extractActionsFromText(transcript);
+    const employees = await getAllEmployees();
+
+    const matchedTasks = matchTasksToEmployees(tasks, employees);
+
+    const outputPath = path.join(__dirname, "extracted_output.json");
+    fs.writeFileSync(outputPath, JSON.stringify(matchedTasks, null, 2), "utf-8");
+
+    res.json({
+      meeting_id: id,
+      tasks: matchedTasks
+    });
+  } catch (err) {
+    console.error("Error extracting latest meeting:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 app.listen(5000, () => console.log("Server started on port 5000"));

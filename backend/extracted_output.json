@@ -1,57 +1,56 @@
 [
   {
     "verb": "discuss",
-    "sentence": "During today's meeting, we discussed two upcoming projects for our development team.",
-    "assignee": null,
+    "sentence": "\nDuring today's meeting, we discussed two upcoming projects for our development team.",
     "deadline": [
       "today"
     ],
-    "urgency": null
+    "urgency": null,
+    "assignee": "Unassigned",
+    "skill": "Unknown"
   },
   {
     "verb": "aim",
-    "sentence": "We aim to deploy an MVP version of that chat what within four weeks.",
-    "assignee": null,
+    "sentence": "We aim to deliver a working prototype within three weeks.\n\n",
     "deadline": [
-      "four weeks"
+      "three weeks"
     ],
-    "urgency": null
-  },
-  {
-    "verb": "focus",
-    "sentence": "The second project focuses on developing a cloud-based inventory management system for warehouse operation.",
-    "assignee": null,
-    "deadline": null,
-    "urgency": null
-  },
-  {
-    "verb": "support",
-    "sentence": "Mathform must support automated restocking alerts, barcode scanning, integration, and detailed analytics dashboards.",
-    "assignee": null,
-    "deadline": null,
-    "urgency": null
-  },
-  {
-    "verb": "target",
-    "sentence": "We are targeting compilation in about six weeks.",
-    "assignee": null,
-    "deadline": [
-      "about six weeks"
-    ],
-    "urgency": null
+    "urgency": null,
+    "assignee": "Unassigned",
+    "skill": "design"
   },
   {
     "verb": "involve",
-    "sentence": "From end, back end, and machine learning engineers will be involved in both projects.",
-    "assignee": null,
+    "sentence": "The second project involves creating a web-based dashboard for managing IoT sensors across smart homes.",
     "deadline": null,
-    "urgency": null
+    "urgency": null,
+    "assignee": "Alice Johnson",
+    "skill": "web"
   },
   {
-    "verb": "finalize",
-    "sentence": "Task distribution and specific responsibilities will be finalized in the next planning session.",
-    "assignee": null,
+    "verb": "target",
+    "sentence": "We are targeting a launch in two months.\n\n",
+    "deadline": [
+      "two months"
+    ],
+    "urgency": null,
+    "assignee": "Unassigned",
+    "skill": "Unknown"
+  },
+  {
+    "verb": "involve",
+    "sentence": "Design, backend, and data engineers will be involved in both projects.",
     "deadline": null,
-    "urgency": null
+    "urgency": null,
+    "assignee": "Unassigned",
+    "skill": "design"
+  },
+  {
+    "verb": "determine",
+    "sentence": "Tasks and assignments will be determined in follow-up sessions.\n",
+    "deadline": null,
+    "urgency": null,
+    "assignee": "Unassigned",
+    "skill": "Unknown"
   }
 ]

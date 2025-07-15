@@ -1,33 +1,30 @@
 import React, { useState, useEffect } from "react";
-// @mui material components
-import Card from "@mui/material/Card";
 
-// Soft UI Dashboard React components
+// MUI & Soft UI components
+import Card from "@mui/material/Card";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import SoftButton from "components/SoftButton";
 
-// Soft UI Dashboard React examples
+// Soft UI Layout
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
 import Table from "examples/Tables/Table";
 
-// Table columns for action items
+// Column definition must match your JSON keys exactly
 const columns = [
   { name: "task", align: "left" },
-  { name: "assignedTo", align: "left" },
+  { name: "description", align: "left" },
+  { name: "assignee", align: "left" },
   { name: "deadline", align: "center" },
+  { name: "skill", align: "center" },
   { name: "urgency", align: "center" },
 ];
 
 function Tables() {
   const [rows, setRows] = useState([]);
-  const [viewType, setViewType] = useState("rule"); // "rule" or "ml"
+  const [viewType, setViewType] = useState("rule");
   const [loading, setLoading] = useState(false);
-
-  // TODO: Replace with actual meeting id source (route param, context, etc.)
-  const meetingId = "your_meeting_id_here";
+  const meetingId = "your_meeting_id_here"; // Replace if needed
 
 useEffect(() => {
   async function fetchTasks() {
@@ -79,7 +76,6 @@ useEffect(() => {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
       <SoftBox py={3}>
         <Card>
           <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
@@ -110,7 +106,6 @@ useEffect(() => {
           </SoftBox>
         </Card>
       </SoftBox>
-      <Footer />
     </DashboardLayout>
   );
 }
