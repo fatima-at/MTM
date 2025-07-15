@@ -1,10 +1,58 @@
-[
-  {
-    "meeting_id":"1",
-    "verb": "stop",
-    "sentence": "Rokaya, please stop being delulu today.",
-    "assignee": ["Rokaya"],
-    "deadline": ["Today"],
-    "urgency": "High"
-  }
-]
+{
+  "meeting_id": 5,
+  "summary": "Discussion on two upcoming projects: an AI-powered customer support chatbot and a cloud-based inventory management system for warehouse operation. Deployment of MVP version of the chatbot within four weeks, and compilation of the inventory management system in about six weeks.",
+  "tasks": [
+    {
+      "task": "Develop MVP version of AI-powered customer support chatbot",
+      "sentence": "Integrate with CRM system, handle real-time queries using natural language processing. Deploy within four weeks.",
+      "urgency": "high",
+      "skills": [
+        "back end",
+        "AI",
+        "machine learning",
+        "NLP"
+      ],
+      "deadline": "2025-08-13",
+      "assignee": [
+        {
+          "id": 3,
+          "name": "Charlie Lee",
+          "match_score": 0.378
+        },
+        {
+          "id": 8,
+          "name": "Hannah Martinez",
+          "match_score": 0.541
+        },
+        {
+          "id": 5,
+          "name": "Ethan Brown",
+          "match_score": 0.349
+        }
+      ]
+    },
+    {
+      "task": "Develop cloud-based inventory management system for warehouse operation",
+      "sentence": "Support automated restocking alerts, barcode scanning, integration, and detailed analytics dashboards. Compile in about six weeks.",
+      "urgency": "high",
+      "skills": [
+        "back end",
+        "cloud computing",
+        "inventory management"
+      ],
+      "deadline": "2025-09-01",
+      "assignee": [
+        {
+          "id": 3,
+          "name": "Charlie Lee",
+          "match_score": 0.378
+        },
+        {
+          "id": 8,
+          "name": "Hannah Martinez",
+          "match_score": 0.297
+        }
+      ]
+    }
+  ]
+}

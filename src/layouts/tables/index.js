@@ -29,30 +29,53 @@ function Tables() {
   // TODO: Replace with actual meeting id source (route param, context, etc.)
   const meetingId = "your_meeting_id_here";
 
-  useEffect(() => {
-    async function fetchTasks() {
-      setLoading(true);
-      try {
-        const res = await fetch(
-          `/action-items?meeting_id=${meetingId}&type=${viewType}`
-        );
-        const data = await res.json();
-        console.log("Fetched data:", data);
-        setRows(
-        data.map((item) => ({
-          task: item.verb || "",
-          assignedTo: item.assignee ? item.assignee.join(", ") : "",
-          deadline: item.deadline ? item.deadline.join(", ") : "",
-          urgency: item.urgency || "", 
-        }))
+useEffect(() => {
+  async function fetchTasks() {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `/action-items?meeting_id=${meetingId}&type=${viewType}`
       );
-      } catch (err) {
-        setRows([]);
-      }
-      setLoading(false);
+      const data = await res.json();
+      console.log("Fetched data:", data);
+
+      const normalizedRows = data.map((item) => {
+        if (viewType === "ml") {
+          return {
+            task: item.task || item.sentence || "",
+            assignedTo: item.assignee
+              ? item.assignee.map((p) => p.name).join(", ")
+              : "Unassigned",
+            deadline: item.deadline || "",
+            urgency: item.urgency || "",
+            description: item.sentence || "",
+          };
+        } else {
+          return {
+            task: item.verb || "",
+            assignedTo:
+              typeof item.assigned_to === "string"
+                ? item.assigned_to
+                : (item.assigned_to || []).join(", "),
+            deadline: Array.isArray(item.deadline)
+              ? item.deadline.join(", ")
+              : item.deadline || "",
+            urgency: item.urgency || "",
+            description: item.sentence || "",
+          };
+        }
+      });
+
+      setRows(normalizedRows);
+    } catch (err) {
+      console.error("Error fetching tasks:", err);
+      setRows([]);
     }
-    fetchTasks();
-  }, [viewType, meetingId]);
+    setLoading(false);
+  }
+
+  fetchTasks();
+}, [viewType, meetingId]);
 
   return (
     <DashboardLayout>

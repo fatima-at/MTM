@@ -31,19 +31,37 @@ app.post("/api/meetings/upload", upload.single("meetingFile"), async (req, res) 
     const meetingId = await saveMeeting(file.originalname, transcript);
     console.log(`Meeting saved to DB with ID: ${meetingId}`);
 
+    // 🧠 Run your Python pipeline to extract + assign + save summary/tasks
+    console.log("Running ML pipeline...");
+    const python = spawn("python", [path.resolve(__dirname, "main.py")]);
+
+    python.stdout.on("data", (data) => {
+      console.log(`📥 pipeline output: ${data.toString()}`);
+    });
+
+    python.stderr.on("data", (data) => {
+      console.error(`❌ pipeline error: ${data.toString()}`);
+    });
+
+    python.on("close", (code) => {
+      console.log(`🔁 ML pipeline finished with code ${code}`);
+    });
+
     const actions = await extractActionsFromText(transcript);
-    // Optionally delete the file after processing
+
     fs.unlink(file.path, () => {
       console.log(`Temporary file deleted: ${file.path}`);
     });
 
     res.json({ id: meetingId, filename: file.originalname, transcript });
     console.log("Upload and processing complete.\n");
+
   } catch (err) {
     console.error("Server error:", err);
     res.status(500).send("Server error: " + err.message);
   }
 });
+
 
 async function extractActionsFromText(text) {
   return new Promise((resolve, reject) => {
@@ -77,24 +95,30 @@ async function extractActionsFromText(text) {
 }
 app.get("/action-items", (req, res) => {
   const { meeting_id, type } = req.query;
+
   if (type === "rule") {
-    // Serve extracted_output.json for rule-based
     const filePath = path.join(__dirname, "extracted_output.json");
     if (fs.existsSync(filePath)) {
       const data = fs.readFileSync(filePath, "utf-8");
-      res.json(JSON.parse(data));
+      res.json(JSON.parse(data));  // rule-based is an array
     } else {
       res.json([]);
     }
   } else {
-    // TODO: Handle ML-based or other types
-    res.json([]);
+    const filePath = path.join(__dirname, "extracted_ML.json");
+    if (fs.existsSync(filePath)) {
+      const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+      res.json(data.tasks || []);  // extract only the tasks array
+    } else {
+      res.json([]);
+    }
   }
 });
+
 app.get("/summarize", (req, res) => {
   const { meeting_id } = req.query;
 
-  // Read rule-based summary
+  // Rule-based summary
   const rulePath = path.join(__dirname, "extracted_output.json");
   let ruleSummary = "";
   if (fs.existsSync(rulePath)) {
@@ -102,12 +126,12 @@ app.get("/summarize", (req, res) => {
     ruleSummary = ruleData.map(item => item.sentence).join(" ");
   }
 
-  // Read ML-based summary
+  // ML-based summary (now a string field inside the file)
   const mlPath = path.join(__dirname, "extracted_ML.json");
   let mlSummary = "";
   if (fs.existsSync(mlPath)) {
     const mlData = JSON.parse(fs.readFileSync(mlPath, "utf-8"));
-    mlSummary = mlData.map(item => item.sentence || item.summary || "").join(" ");
+    mlSummary = mlData.summary || "";
   }
 
   res.json({
@@ -116,4 +140,5 @@ app.get("/summarize", (req, res) => {
     ml_summary: mlSummary
   });
 });
+
 app.listen(5000, () => console.log("Server started on port 5000"));

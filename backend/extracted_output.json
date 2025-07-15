@@ -1,10 +1,57 @@
 [
   {
-    "meeting_id":"1",
-    "verb": "send",
-    "sentence": "John, please send the report by Friday.",
-    "assignee": ["John"],
-    "deadline": ["Friday"],
-    "urgency": "High"
+    "verb": "discuss",
+    "sentence": "During today's meeting, we discussed two upcoming projects for our development team.",
+    "assignee": null,
+    "deadline": [
+      "today"
+    ],
+    "urgency": null
+  },
+  {
+    "verb": "aim",
+    "sentence": "We aim to deploy an MVP version of that chat what within four weeks.",
+    "assignee": null,
+    "deadline": [
+      "four weeks"
+    ],
+    "urgency": null
+  },
+  {
+    "verb": "focus",
+    "sentence": "The second project focuses on developing a cloud-based inventory management system for warehouse operation.",
+    "assignee": null,
+    "deadline": null,
+    "urgency": null
+  },
+  {
+    "verb": "support",
+    "sentence": "Mathform must support automated restocking alerts, barcode scanning, integration, and detailed analytics dashboards.",
+    "assignee": null,
+    "deadline": null,
+    "urgency": null
+  },
+  {
+    "verb": "target",
+    "sentence": "We are targeting compilation in about six weeks.",
+    "assignee": null,
+    "deadline": [
+      "about six weeks"
+    ],
+    "urgency": null
+  },
+  {
+    "verb": "involve",
+    "sentence": "From end, back end, and machine learning engineers will be involved in both projects.",
+    "assignee": null,
+    "deadline": null,
+    "urgency": null
+  },
+  {
+    "verb": "finalize",
+    "sentence": "Task distribution and specific responsibilities will be finalized in the next planning session.",
+    "assignee": null,
+    "deadline": null,
+    "urgency": null
   }
 ]

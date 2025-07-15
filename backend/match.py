@@ -55,11 +55,11 @@ def match_tasks_to_employees(tasks, employees):
 
         results.append({
             "task": task["task"],
-            "description": task.get("description", ""),
+            "sentence": task.get("description", ""),
             "urgency": task.get("urgency", ""),
             "skills": required_skills,
             "deadline": task.get("deadline", ""),
-            "assigned_to": assigned
+            "assignee": assigned
         })
 
     return results
