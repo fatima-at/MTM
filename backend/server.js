@@ -91,5 +91,29 @@ app.get("/action-items", (req, res) => {
     res.json([]);
   }
 });
+app.get("/summarize", (req, res) => {
+  const { meeting_id } = req.query;
 
+  // Read rule-based summary
+  const rulePath = path.join(__dirname, "extracted_output.json");
+  let ruleSummary = "";
+  if (fs.existsSync(rulePath)) {
+    const ruleData = JSON.parse(fs.readFileSync(rulePath, "utf-8"));
+    ruleSummary = ruleData.map(item => item.sentence).join(" ");
+  }
+
+  // Read ML-based summary
+  const mlPath = path.join(__dirname, "extracted_ML.json");
+  let mlSummary = "";
+  if (fs.existsSync(mlPath)) {
+    const mlData = JSON.parse(fs.readFileSync(mlPath, "utf-8"));
+    mlSummary = mlData.map(item => item.sentence || item.summary || "").join(" ");
+  }
+
+  res.json({
+    meeting_id,
+    rule_summary: ruleSummary,
+    ml_summary: mlSummary
+  });
+});
 app.listen(5000, () => console.log("Server started on port 5000"));

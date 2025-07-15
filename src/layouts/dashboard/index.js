@@ -6,6 +6,8 @@ import axios from "axios";
 function Dashboard() {
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
+  const [summary, setSummary] = useState(null);
+  const [meetingId, setMeetingId] = useState(null);
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
@@ -21,14 +23,33 @@ function Dashboard() {
       formData.append("meetingFile", file);
 
       try {
-        await axios.post("http://localhost:5000/api/meetings/upload", formData, {
+        const response = await axios.post("http://localhost:5000/api/meetings/upload", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        // Optionally show success message
+        // Get meeting ID from response if available
+        const id = response.data.id || null;
+        setMeetingId(id);
+        setSummary(null); // Clear previous summary
       } catch (error) {
         // Handle error
         console.error("Upload failed:", error);
       }
+    }
+  };
+
+  // Summarize button handler
+  const handleSummarize = async () => {
+    const meetingId=1;
+    if (!meetingId) {
+      alert("Please upload a meeting file first.");
+      return;
+    }
+    try {
+      const summaryRes = await axios.get(`http://localhost:5000/summarize?meeting_id=${meetingId}`);
+      setSummary(summaryRes.data);
+      console.log("Summary response:", summaryRes.data);
+    } catch (error) {
+      console.error("Summary fetch failed:", error);
     }
   };
 
@@ -48,6 +69,32 @@ function Dashboard() {
         onChange={handleFileChange}
         accept="audio/*,video/*"
       />
+      {/* Summarize Button */}
+      <SoftButton
+        variant="gradient"
+        color="success"
+        type="button"
+        style={{ marginTop: "20px" }}
+        onClick={handleSummarize}
+       
+      >
+        Summarize
+      </SoftButton>
+      {summary && (
+        <div style={{ marginTop: "30px", width: "100%" }}>
+          <h2>Summary Comparison</h2>
+          <div style={{ display: "flex", gap: "40px" }}>
+            <div style={{ flex: 1 }}>
+              <h4>Rule-based</h4>
+              <p>{summary.rule_summary || "No summary available."}</p>
+            </div>
+            <div style={{ flex: 1 }}>
+              <h4>ML-based</h4>
+              <p>{summary.ml_summary || "No summary available."}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </SoftBox>
   );
 }
