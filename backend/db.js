@@ -10,6 +10,7 @@ db.serialize(() => {
       filename TEXT,
       transcript TEXT
     )
+
   `);
 });
 
@@ -26,7 +27,14 @@ function saveMeeting(filename, transcript) {
   });
 }
 
-
+function getAllEmployees() {
+  return new Promise((resolve, reject) => {
+    db.all("SELECT * FROM employees", (err, rows) => {
+      if (err) return reject(err);
+      resolve(rows);
+    });
+  });
+}
 function getLatestMeeting() {
   return new Promise((resolve, reject) => {
     db.get(
@@ -38,4 +46,4 @@ function getLatestMeeting() {
     );
   });
 }
-module.exports = { saveMeeting,  getLatestMeeting };
+module.exports = {   getAllEmployees, saveMeeting,  getLatestMeeting };

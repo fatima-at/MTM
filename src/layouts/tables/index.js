@@ -1,62 +1,61 @@
 import React, { useState, useEffect } from "react";
-// @mui material components
-import Card from "@mui/material/Card";
 
-// Soft UI Dashboard React components
+// MUI & Soft UI components
+import Card from "@mui/material/Card";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import SoftButton from "components/SoftButton";
 
-// Soft UI Dashboard React examples
+// Soft UI Layout
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
 import Table from "examples/Tables/Table";
 
-// Table columns for action items
+// Column definition must match your JSON keys exactly
 const columns = [
   { name: "task", align: "left" },
-  { name: "assignedTo", align: "left" },
+  { name: "description", align: "left" },
+  { name: "assignee", align: "left" },
   { name: "deadline", align: "center" },
+  { name: "skill", align: "center" },
   { name: "urgency", align: "center" },
 ];
 
 function Tables() {
   const [rows, setRows] = useState([]);
-  const [viewType, setViewType] = useState("rule"); // "rule" or "ml"
+  const [viewType, setViewType] = useState("rule");
   const [loading, setLoading] = useState(false);
-
-  // TODO: Replace with actual meeting id source (route param, context, etc.)
-  const meetingId = "your_meeting_id_here";
+  const meetingId = "your_meeting_id_here"; // Replace if needed
 
   useEffect(() => {
     async function fetchTasks() {
       setLoading(true);
       try {
-        const res = await fetch(
-          `/action-items?meeting_id=${meetingId}&type=${viewType}`
-        );
+        const res = await fetch(`http://localhost:5000/action-items?meeting_id=${meetingId}&type=${viewType}`);
         const data = await res.json();
         console.log("Fetched data:", data);
+
         setRows(
-        data.map((item) => ({
-          task: item.verb || "",
-          assignedTo: item.assignee ? item.assignee.join(", ") : "",
-          deadline: item.deadline ? item.deadline.join(", ") : "",
-          urgency: item.urgency || "", 
-        }))
-      );
+          data.map((item) => ({
+            task: item.verb || "",
+            description: item.sentence || "",
+            assignee: item.assignee || "",
+            deadline: Array.isArray(item.deadline) ? item.deadline.join(", ") : item.deadline || "",
+            skill: item.skill || "",
+            urgency: item.urgency || "",
+          }))
+        );
       } catch (err) {
+        console.error("Error fetching tasks:", err);
         setRows([]);
       }
       setLoading(false);
     }
+
     fetchTasks();
   }, [viewType, meetingId]);
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
       <SoftBox py={3}>
         <Card>
           <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
@@ -87,7 +86,6 @@ function Tables() {
           </SoftBox>
         </Card>
       </SoftBox>
-      <Footer />
     </DashboardLayout>
   );
 }
